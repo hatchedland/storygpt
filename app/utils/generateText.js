@@ -1,7 +1,7 @@
-const openai = require('./openai-config');
+import openai from '../../openai-config'
 
-export async function generatedText(keywords) {
-    console.log(keywords)
+export default async function generatedText(keywords) {
+  console.log(keywords);
   try {
     // Include keywords in your prompt
     const prompt = `
@@ -33,22 +33,16 @@ export async function generatedText(keywords) {
     ]
     `;
 
-    const response = await openai.createCompletion({
-        engine: 'text-davinci-002',
-        prompt,
-        max_tokens: 50, // Adjust the number of tokens as needed
-      });
+    const response = await openai.completions.create({
+      model: "text-davinci-002",
+      prompt,
+      max_tokens: 50, // Adjust the number of tokens as needed
+    });
 
     const result = response.choices[0].text;
     return result;
-
   } catch (error) {
-    console.error('Error interacting with GPT:', error);
+    console.error("Error interacting with GPT:", error);
     throw error;
   }
 }
-
-module.exports = {
-    generatedText,
-  };
-  
