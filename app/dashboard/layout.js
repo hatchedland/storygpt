@@ -6,14 +6,23 @@ import generatedText from "../utils/generateText";
 export default function Dashboard() {
   const [characters, setCharacters] = useState("");
   const [locations, setLocations] = useState("");
-  const [response, setResponse] = useState();
+  const [response, setResponse] = useState(null);
 
   const handleGenerate = async () => {
     const keywords = `characters: ${characters},locations: ${locations}`;
 
-    const result = await generatedText(keywords);
-    // console.log(result);
+    try{
+      const result = await generatedText(keywords);
+      setResponse(JSON.parse(result))
+    }
+    catch(error){
+      console.log('penis is long')
+    }
   };
+
+  function returnResult(){
+    return response
+  }
 
   return (
     <div className="flex flex-col items-center justify-center ">
@@ -56,7 +65,16 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <div>{response}</div>
+    
+        <div>
+        {response &&
+          response.result.map((conv) => (
+            <p key={conv.Scene}>
+            <div>{conv.Scene}</div>  
+            <div>{conv.Dialogue}</div>
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );
